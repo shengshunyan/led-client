@@ -1865,6 +1865,11 @@
     "@types/react" "*"
     "@types/react-native" "*"
 
+"@types/react-native-sqlite-storage@^6.0.0":
+  version "6.0.0"
+  resolved "https://npm-registry.duowan.com/@types%2freact-native-sqlite-storage/-/react-native-sqlite-storage-6.0.0.tgz#3d183123f1200744f84b699704a3221ded4cb04b"
+  integrity sha512-bzZLc+DsfSQUcUtZUa5M1Ubi/ud88Pdd3k1nbUCQ1baHHzLg95S0DidCWscDHnnuGFB+18GBbcY7r97ivb0XpA==
+
 "@types/react-native-vector-icons@^6.4.10":
   version "6.4.13"
   resolved "https://npm-registry.duowan.com/@types%2freact-native-vector-icons/-/react-native-vector-icons-6.4.13.tgz"
@@ -6069,6 +6074,11 @@ react-native-size-matters@^0.4.0:
   version "0.4.0"
   resolved "https://npm-registry.duowan.com/react-native-size-matters/-/react-native-size-matters-0.4.0.tgz"
   integrity sha512-8/C0htHrFWeUm9N8JegmadovUfgTWkGBkDPZ1N3YkXtDWb+98Ya2gThiKcu445r8c7YhcrBfnHz/mYsXIusaOQ==
+
+react-native-sqlite-storage@^6.0.1:
+  version "6.0.1"
+  resolved "https://npm-registry.duowan.com/react-native-sqlite-storage/-/react-native-sqlite-storage-6.0.1.tgz#ce6a6b852f07abbea68658d5363818c8bef45dfb"
+  integrity sha512-1tDFjrint6X6qSYKf3gDyz+XB+X79jfiL6xTugKHPRtF0WvqMtVgdLuNqZunIXjNEvNtNVEbXaeZ6MsguFu00A==
 
 react-native-vector-icons@^9.2.0:
   version "9.2.0"
