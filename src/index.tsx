@@ -1,40 +1,52 @@
 import React, {useEffect, useState} from 'react';
+import {DeviceEventEmitter} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import FlashMessage from 'react-native-flash-message';
 import router from './router';
 import MenuIcon from './components/MenuIcon';
 import MenuDrawer from './MenuDrawer';
 import {initModels} from './models';
-import {todo} from './models';
+import {Button} from '@rneui/base';
+import {EventNameEnum} from './constants';
 
 const Stack = createNativeStackNavigator();
 
 function Main() {
+  const [isReady, setIsReady] = useState(false);
   /** 菜单抽屉是否可见 */
   const [menuDrawerVisible, setMenuDrawerVisible] = useState(false);
 
-  const headerLeft = () => (
+  const listHeaderLeft = () => (
     <MenuIcon openMenuDrawer={() => setMenuDrawerVisible(true)} />
+  );
+
+  const detailHeaderRight = () => (
+    <Button
+      title="保存"
+      onPress={() => {
+        DeviceEventEmitter.emit(EventNameEnum.DETAIL_SAVE);
+      }}
+    />
   );
 
   useEffect(() => {
     const init = async () => {
-      await initModels();
-      const list = await todo?.getList();
-      console.log('list: ', list);
-      // await todo.addItem({id: 1, value: 'hhh'});
-      // await todo.editItem({id: 2, value: 'www'});
-      // await todo.deleteItem(3);
-      // const list1 = await todo.getList();
-      // console.log('list1: ', list1);
-      const item = await todo?.getItem(2);
-      console.log('item: ', item);
+      /** 初始化数据库 */
+      await initModels().finally(() => {
+        setIsReady(true);
+      });
     };
     init();
   }, []);
 
+  if (!isReady) {
+    return null;
+  }
+
   return (
     <MenuDrawer visible={menuDrawerVisible} setVisible={setMenuDrawerVisible}>
+      <FlashMessage position="center" />
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
@@ -52,7 +64,7 @@ function Main() {
             getComponent={router.list.getComponent}
             options={{
               title: router.list.title,
-              headerLeft,
+              headerLeft: listHeaderLeft,
             }}
           />
           <Stack.Screen
@@ -60,6 +72,7 @@ function Main() {
             getComponent={router.detail.getComponent}
             options={{
               title: router.detail.title,
+              headerRight: detailHeaderRight,
             }}
           />
         </Stack.Navigator>

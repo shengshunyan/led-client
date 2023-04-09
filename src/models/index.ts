@@ -1,13 +1,18 @@
 import {initDB} from './db';
-import {TODO} from './Todo';
+import {Setting} from './Setting';
+import {Led} from './Led';
 
-let todo: TODO | null = null;
+let setting: Setting | null = null;
+let led: Led | null = null;
 
 export const initModels = async () => {
   const db = await initDB();
 
-  todo = new TODO(db);
-  await todo.initTable();
+  setting = new Setting(db);
+  await setting.initTable();
+
+  led = new Led(db);
+  await led.initTable();
 };
 
-export {todo};
+export {setting as settingModal, led as ledModal};

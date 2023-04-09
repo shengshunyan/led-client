@@ -1,11 +1,13 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {FAB} from '@rneui/base';
 
 const Bottom: React.FunctionComponent = () => {
+  const navigation = useNavigation<NavigationProp<any>>();
+
   const onPress = () => {
-    // TODO: 添加逻辑
-    console.log('add');
+    navigation.navigate('Detail');
   };
 
   return (

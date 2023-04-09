@@ -6021,6 +6021,14 @@ react-native-elevation@^1.0.0:
   resolved "https://npm-registry.duowan.com/react-native-elevation/-/react-native-elevation-1.0.0.tgz#2a091c688290ac9b08b5842d1a8e8a00fc84233e"
   integrity sha512-BWIKcEYtzjRV6GpkX0Km5/w2E7fgIcywiQOT7JZTc5NSbv/YI9kpFinB9lRFsOoRVGmiqq/O3VfP/oH2clIiBA==
 
+react-native-flash-message@^0.4.1:
+  version "0.4.1"
+  resolved "https://npm-registry.duowan.com/react-native-flash-message/-/react-native-flash-message-0.4.1.tgz#3a894e65364bc900ca51b8b6f5b317a74094a3f2"
+  integrity sha512-sWpLBzB7Nbrh9ppq/8BfU10kd2wQuEGsg0RXf5qpQ9yxnsO7ShZzCGh7WLzRZcttkQg43onKkL2gvuI0PG1Buw==
+  dependencies:
+    prop-types "^15.8.1"
+    react-native-iphone-screen-helper "^2.0.2"
+
 react-native-gesture-handler@^2.9.0:
   version "2.9.0"
   resolved "https://npm-registry.duowan.com/react-native-gesture-handler/-/react-native-gesture-handler-2.9.0.tgz"
@@ -6036,6 +6044,11 @@ react-native-gradle-plugin@^0.71.15:
   version "0.71.15"
   resolved "https://npm-registry.duowan.com/react-native-gradle-plugin/-/react-native-gradle-plugin-0.71.15.tgz"
   integrity sha512-7S3pAuPaQJlhax6EZ4JMsDNpj05TfuzX9gPgWLrFfAIWIFLuJ6aDQYAZy2TEI9QJALPoWrj8LWaqP/DGYh14pw==
+
+react-native-iphone-screen-helper@^2.0.2:
+  version "2.0.3"
+  resolved "https://npm-registry.duowan.com/react-native-iphone-screen-helper/-/react-native-iphone-screen-helper-2.0.3.tgz#6bc6d19db5e4691d6204e9e996be9214c117c846"
+  integrity sha512-gbSnV0iYWQ3hne3inYoueatSJL/Un49biIkHLGKsm7J7QjFhL+/WSPB1sZhQ87lNIANwFh33nvxcjixxR4T+NQ==
 
 react-native-ratings@^8.1.0:
   version "8.1.0"

@@ -1,8 +1,8 @@
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
-import {ToDoItem} from './types';
+import {ILedItem, TableRow} from './types';
 
-export class TODO {
-  private tableName = 'todoTable';
+export class Led {
+  private tableName = 'led';
 
   private db: SQLiteDatabase;
 
@@ -13,7 +13,9 @@ export class TODO {
   initTable = async () => {
     const {db} = this;
     const query = `CREATE TABLE IF NOT EXISTS ${this.tableName}(
-          value TEXT NOT NULL
+          name TEXT NOT NULL,
+          difficulty INTEGER NOT NULL,
+          config TEXT NOT NULL
       );`;
     await db.executeSql(query);
   };
@@ -22,21 +24,21 @@ export class TODO {
   getList = async () => {
     const {db, tableName} = this;
     const results = await db.executeSql(
-      `SELECT rowid as id,value FROM ${tableName}`,
+      `SELECT rowid,name,difficulty,config FROM ${tableName}`,
     );
-    const todoItems: ToDoItem[] = [];
+    const list: TableRow<ILedItem>[] = [];
     results.forEach(result => {
       for (let index = 0; index < result.rows.length; index++) {
-        todoItems.push(result.rows.item(index));
+        list.push(result.rows.item(index));
       }
     });
-    return todoItems;
+    return list;
   };
 
   /** 查询详情 */
-  getItem = async (id: number) => {
+  getItem = async (rowid: number) => {
     const {db, tableName} = this;
-    const query = `SELECT rowid as id,value FROM ${tableName} WHERE rowid=${id}`;
+    const query = `SELECT rowid,name,difficulty,config FROM ${tableName} WHERE rowid=${rowid}`;
     const result = await db.executeSql(query);
     const item = result[0].rows.item(0);
 
@@ -44,27 +46,28 @@ export class TODO {
   };
 
   /** 新增一条记录 */
-  addItem = (item: Omit<ToDoItem, 'id'>) => {
+  addItem = (item: ILedItem) => {
     const {db, tableName} = this;
-    const query = `INSERT INTO ${tableName}(value) values('${item.value}')`;
+    const query = `INSERT INTO ${tableName}(name,difficulty,config) 
+      values('${item.name}','${item.difficulty}','${item.config}')`;
 
     return db.executeSql(query);
   };
 
   /** 修改一条记录 */
-  editItem = (item: ToDoItem) => {
+  editItem = (item: TableRow<ILedItem>) => {
     const {db, tableName} = this;
     const query = `UPDATE ${tableName}
-      SET value='${item.value}'
-      WHERE rowid=${item.id}`;
+      SET name='${item.name}', difficulty='${item.difficulty}', config='${item.config}'
+      WHERE rowid=${item.rowid}`;
 
     return db.executeSql(query);
   };
 
   /** 删除一条记录 */
-  deleteItem = (id: number) => {
+  deleteItem = (rowid: number) => {
     const {db, tableName} = this;
-    const query = `DELETE FROM ${tableName} WHERE rowid=${id}`;
+    const query = `DELETE FROM ${tableName} WHERE rowid=${rowid}`;
 
     return db.executeSql(query);
   };

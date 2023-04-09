@@ -3,8 +3,13 @@ import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {Button, Icon, ListItem} from '@rneui/base';
 import React from 'react';
 import {View} from 'react-native';
+import {ILedItem, TableRow} from '../../models/types';
 
-const LedList: React.FunctionComponent = () => {
+interface IProps {
+  data: TableRow<ILedItem>[];
+}
+
+const LedList: React.FunctionComponent<IProps> = ({data}) => {
   const navigation = useNavigation<NavigationProp<any>>();
 
   const rightContent = () => (
@@ -18,15 +23,18 @@ const LedList: React.FunctionComponent = () => {
 
   return (
     <View>
-      <ListItem.Swipeable
-        onPress={() => navigation.navigate('Detail')}
-        rightContent={rightContent}>
-        <Icon name="label-important-outline" type="material" />
-        <ListItem.Content>
-          <ListItem.Title>Hello Swiper</ListItem.Title>
-        </ListItem.Content>
-        <ListItem.Chevron />
-      </ListItem.Swipeable>
+      {data.map(item => (
+        <ListItem.Swipeable
+          key={item.rowid}
+          onPress={() => navigation.navigate('Detail')}
+          rightContent={rightContent}>
+          <Icon name="label-important-outline" type="material" />
+          <ListItem.Content>
+            <ListItem.Title>{item.name}</ListItem.Title>
+          </ListItem.Content>
+          <ListItem.Chevron />
+        </ListItem.Swipeable>
+      ))}
     </View>
   );
 };

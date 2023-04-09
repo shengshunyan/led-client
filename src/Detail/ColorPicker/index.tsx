@@ -1,24 +1,34 @@
 import {BottomSheet, Button} from '@rneui/base';
-import React from 'react';
+import React, {useState} from 'react';
 import ColorPicker from 'react-native-wheel-color-picker';
 import {StyleSheet, View} from 'react-native';
 
 interface IProps {
   visible: boolean;
   setVisible: (value: boolean) => void;
+  onSelectColor: (color: string) => void;
 }
 
 const MyColorPicker: React.FunctionComponent<IProps> = function ({
   visible,
   setVisible,
+  onSelectColor,
 }) {
-  const onColorChange = (color: string) => {
-    console.log('color: ', color);
+  const [color, setColor] = useState('#fff');
+
+  const onColorChange = (value: string) => {
+    setColor(value);
+  };
+
+  const onSubmit = () => {
+    onSelectColor(color);
+    setVisible(false);
   };
 
   return (
     <BottomSheet
       containerStyle={styles.container}
+      backdropStyle={styles.backdrop}
       modalProps={{}}
       isVisible={visible}>
       <ColorPicker
@@ -41,7 +51,7 @@ const MyColorPicker: React.FunctionComponent<IProps> = function ({
         autoResetSlider
       />
       <View style={styles.buttons}>
-        <Button title="确认" onPress={() => setVisible(false)} />
+        <Button title="确认" onPress={onSubmit} />
         <Button title="取消" type="outline" onPress={() => setVisible(false)} />
       </View>
     </BottomSheet>
@@ -51,6 +61,9 @@ const MyColorPicker: React.FunctionComponent<IProps> = function ({
 const styles = StyleSheet.create({
   container: {
     padding: 24,
+  },
+  backdrop: {
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
   },
   buttons: {
     display: 'flex',
