@@ -1,13 +1,23 @@
 import React, {useEffect, useState, useRef, useCallback} from 'react';
 import {View, StyleSheet, Text, DeviceEventEmitter} from 'react-native';
+import {
+  RouteProp,
+  useRoute,
+  NavigationProp,
+  useNavigation,
+} from '@react-navigation/native';
 import {ButtonGroup, Input} from '@rneui/themed';
 import {showMessage} from 'react-native-flash-message';
 import {EventNameEnum} from '../constants';
 import LedList from './LedList';
 import {ledModal} from '../models';
+import router from '../router';
 
 const Detail: React.FunctionComponent<{navigation: any}> = function () {
   const inputRef = useRef<any>();
+  const navigation = useNavigation<NavigationProp<any>>();
+  const route = useRoute<RouteProp<{params: {rowid: number} | undefined}>>();
+  const {rowid} = route.params || {};
 
   /** 名称 */
   const [name, setName] = useState('');
@@ -18,9 +28,26 @@ const Detail: React.FunctionComponent<{navigation: any}> = function () {
     {},
   );
 
-  const onNameChange = (value: string) => {
-    setName(value);
-  };
+  // 编辑模式：需要获取旧配置详情
+  useEffect(() => {
+    const init = async () => {
+      if (!rowid && rowid !== 0) {
+        return;
+      }
+
+      const detail = await ledModal?.getItem(rowid).catch(error => {
+        console.log('获取详情错误: ', error, rowid);
+      });
+      if (!detail) {
+        return;
+      }
+
+      setName(detail.name);
+      setDifficulty(detail.difficulty);
+      setConfig(JSON.parse(detail.config));
+    };
+    init();
+  }, [rowid]);
 
   // 保存
   const onSubmit = useCallback(() => {
@@ -31,14 +58,31 @@ const Detail: React.FunctionComponent<{navigation: any}> = function () {
         message: '请输入名称',
         type: 'warning',
       });
+      return;
     }
 
-    ledModal?.addItem({
-      name,
-      difficulty,
-      config: JSON.stringify(config),
-    });
-  }, [config, difficulty, name]);
+    if (!rowid && rowid !== 0) {
+      // 新增
+      ledModal?.addItem({
+        name,
+        difficulty,
+        config: JSON.stringify(config),
+      });
+    } else {
+      // 编辑
+      ledModal?.editItem({
+        rowid,
+        name,
+        difficulty,
+        config: JSON.stringify(config),
+      });
+    }
+
+    // 刷新列表
+    DeviceEventEmitter.emit(EventNameEnum.REFRESH_LIST);
+    // 导航到列表
+    navigation.navigate(router.list.name);
+  }, [config, difficulty, name, navigation, rowid]);
 
   // 监听保存按钮点击
   useEffect(() => {
@@ -57,7 +101,9 @@ const Detail: React.FunctionComponent<{navigation: any}> = function () {
       <Input
         placeholder="名称"
         value={name}
-        onChangeText={onNameChange}
+        onChangeText={(value: string) => {
+          setName(value);
+        }}
         ref={inputRef}
       />
 

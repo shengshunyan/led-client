@@ -6,15 +6,17 @@ import {StyleSheet, View} from 'react-native';
 interface IProps {
   visible: boolean;
   setVisible: (value: boolean) => void;
+  color: string;
   onSelectColor: (color: string) => void;
 }
 
 const MyColorPicker: React.FunctionComponent<IProps> = function ({
   visible,
   setVisible,
+  color: oldColor,
   onSelectColor,
 }) {
-  const [color, setColor] = useState('#fff');
+  const [color, setColor] = useState(oldColor);
 
   const onColorChange = (value: string) => {
     setColor(value);
@@ -32,7 +34,7 @@ const MyColorPicker: React.FunctionComponent<IProps> = function ({
       modalProps={{}}
       isVisible={visible}>
       <ColorPicker
-        // color={this.state.currentColor}
+        color={color}
         onColorChangeComplete={onColorChange}
         palette={[
           '#000000',

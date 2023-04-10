@@ -29,10 +29,15 @@ const LedList: React.FunctionComponent<IProps> = function ({
   const [currentPosition, setCurrentPosition] = useState<{
     row: number;
     col: number;
+    color: string;
   } | null>(null);
 
-  const onItemPress = (data: {row: number; col: number}) => {
-    setCurrentPosition(data);
+  const onItemPress = ({row, col}: {row: number; col: number}) => {
+    setCurrentPosition({
+      row,
+      col,
+      color: config?.[`row_${row}`]?.[`col_${col}`] || '#fff',
+    });
     setColorPickerVisible(true);
   };
 
@@ -90,6 +95,7 @@ const LedList: React.FunctionComponent<IProps> = function ({
           <MyColorPicker
             visible={colorPickerVisible}
             setVisible={setColorPickerVisible}
+            color={currentPosition?.color || '#fff'}
             onSelectColor={onSelectColor}
           />
         </View>

@@ -36,7 +36,7 @@ export class Led {
   };
 
   /** 查询详情 */
-  getItem = async (rowid: number) => {
+  getItem = async (rowid: number): Promise<ILedItem> => {
     const {db, tableName} = this;
     const query = `SELECT rowid,name,difficulty,config FROM ${tableName} WHERE rowid=${rowid}`;
     const result = await db.executeSql(query);

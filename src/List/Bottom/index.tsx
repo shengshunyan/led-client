@@ -2,12 +2,13 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {FAB} from '@rneui/base';
+import router from '../../router';
 
 const Bottom: React.FunctionComponent = () => {
   const navigation = useNavigation<NavigationProp<any>>();
 
   const onPress = () => {
-    navigation.navigate('Detail');
+    navigation.navigate(router.detail.name);
   };
 
   return (
@@ -23,7 +24,10 @@ const Bottom: React.FunctionComponent = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 24,
+    position: 'absolute',
+    bottom: 24,
+    left: '50%',
+    transform: [{translateX: -25}],
   },
 });
 

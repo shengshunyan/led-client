@@ -9,6 +9,8 @@ import MenuDrawer from './MenuDrawer';
 import {initModels} from './models';
 import {Button} from '@rneui/base';
 import {EventNameEnum} from './constants';
+import List from './List';
+import Detail from './Detail';
 
 const Stack = createNativeStackNavigator();
 
@@ -61,7 +63,7 @@ function Main() {
           }}>
           <Stack.Screen
             name={router.list.name}
-            getComponent={router.list.getComponent}
+            component={List}
             options={{
               title: router.list.title,
               headerLeft: listHeaderLeft,
@@ -69,7 +71,7 @@ function Main() {
           />
           <Stack.Screen
             name={router.detail.name}
-            getComponent={router.detail.getComponent}
+            component={Detail}
             options={{
               title: router.detail.title,
               headerRight: detailHeaderRight,
