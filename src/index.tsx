@@ -11,6 +11,8 @@ import {Button} from '@rneui/base';
 import {EventNameEnum} from './constants';
 import List from './List';
 import Detail from './Detail';
+import Quantity from './Quantity';
+import Debug from './Debug';
 
 const Stack = createNativeStackNavigator();
 
@@ -47,9 +49,9 @@ function Main() {
   }
 
   return (
-    <MenuDrawer visible={menuDrawerVisible} setVisible={setMenuDrawerVisible}>
-      <FlashMessage position="center" />
-      <NavigationContainer>
+    <NavigationContainer>
+      <MenuDrawer visible={menuDrawerVisible} setVisible={setMenuDrawerVisible}>
+        <FlashMessage position="center" />
         <Stack.Navigator
           screenOptions={{
             headerStyle: {
@@ -77,9 +79,23 @@ function Main() {
               headerRight: detailHeaderRight,
             }}
           />
+          <Stack.Screen
+            name={router.quantity.name}
+            component={Quantity}
+            options={{
+              title: router.quantity.title,
+            }}
+          />
+          <Stack.Screen
+            name={router.debug.name}
+            component={Debug}
+            options={{
+              title: router.debug.title,
+            }}
+          />
         </Stack.Navigator>
-      </NavigationContainer>
-    </MenuDrawer>
+      </MenuDrawer>
+    </NavigationContainer>
   );
 }
 

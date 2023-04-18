@@ -1,6 +1,8 @@
 import * as React from 'react';
 import {ListItem, Icon} from '@rneui/base';
 import {Drawer} from 'react-native-drawer-layout';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import router from '../router';
 
 interface IProps {
   visible: boolean;
@@ -13,6 +15,8 @@ const MenuDrawer: React.FunctionComponent<IProps> = ({
   setVisible,
   children,
 }) => {
+  const navigation = useNavigation<NavigationProp<any>>();
+
   return (
     <Drawer
       open={visible}
@@ -21,21 +25,25 @@ const MenuDrawer: React.FunctionComponent<IProps> = ({
       renderDrawerContent={() => {
         return (
           <>
-            <ListItem>
-              <Icon name="inbox" type="material-community" color="grey" />
+            <ListItem
+              onPress={() => {
+                navigation.navigate(router.quantity.name);
+                setVisible(false);
+              }}>
+              <Icon name="appstore-o" type="antdesign" color="grey" />
               <ListItem.Content>
-                <ListItem.Title>Inbox</ListItem.Title>
+                <ListItem.Title>数量配置</ListItem.Title>
               </ListItem.Content>
               <ListItem.Chevron />
             </ListItem>
-            <ListItem>
-              <Icon
-                name="trash-can-outline"
-                type="material-community"
-                color="grey"
-              />
+            <ListItem
+              onPress={() => {
+                navigation.navigate(router.debug.name);
+                setVisible(false);
+              }}>
+              <Icon name="computer" type="material" color="grey" />
               <ListItem.Content>
-                <ListItem.Title>Trash</ListItem.Title>
+                <ListItem.Title>调试</ListItem.Title>
               </ListItem.Content>
               <ListItem.Chevron />
             </ListItem>
