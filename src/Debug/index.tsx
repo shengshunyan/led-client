@@ -4,10 +4,7 @@ import WebView from 'react-native-webview';
 
 const Debug: React.FunctionComponent = () => {
   return (
-    <WebView
-      containerStyle={styles.container}
-      source={{uri: 'https://reactnative.dev/'}}
-    />
+    <WebView containerStyle={styles.container} source={{uri: '4.3.2.1'}} />
   );
 };
 

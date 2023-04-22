@@ -2459,13 +2459,21 @@ buffer-from@^1.0.0:
   resolved "https://npm-registry.duowan.com/buffer-from/-/buffer-from-1.1.2.tgz"
   integrity sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==
 
-buffer@^5.5.0:
+buffer@^5.5.0, buffer@^5.6.0:
   version "5.7.1"
   resolved "https://npm-registry.duowan.com/buffer/-/buffer-5.7.1.tgz"
   integrity sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==
   dependencies:
     base64-js "^1.3.1"
     ieee754 "^1.1.13"
+
+buffer@^6.0.3:
+  version "6.0.3"
+  resolved "https://npm-registry.duowan.com/buffer/-/buffer-6.0.3.tgz#2ace578459cc8fbe2a70aaa8f52ee63b6a74c6c6"
+  integrity sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==
+  dependencies:
+    base64-js "^1.3.1"
+    ieee754 "^1.2.1"
 
 bytes@3.0.0:
   version "3.0.0"
@@ -3318,6 +3326,11 @@ event-target-shim@^5.0.0, event-target-shim@^5.0.1:
   resolved "https://npm-registry.duowan.com/event-target-shim/-/event-target-shim-5.0.1.tgz"
   integrity sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==
 
+events@^3.1.0:
+  version "3.3.0"
+  resolved "https://npm-registry.duowan.com/events/-/events-3.3.0.tgz#31a95ad0a924e2d2c419a813aeb2c4e878ea7400"
+  integrity sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==
+
 execa@^1.0.0:
   version "1.0.0"
   resolved "https://npm-registry.duowan.com/execa/-/execa-1.0.0.tgz"
@@ -3863,7 +3876,7 @@ human-signals@^2.1.0:
   resolved "https://npm-registry.duowan.com/human-signals/-/human-signals-2.1.0.tgz"
   integrity sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==
 
-ieee754@^1.1.13:
+ieee754@^1.1.13, ieee754@^1.2.1:
   version "1.2.1"
   resolved "https://npm-registry.duowan.com/ieee754/-/ieee754-1.2.1.tgz"
   integrity sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==
@@ -6092,6 +6105,14 @@ react-native-sqlite-storage@^6.0.1:
   version "6.0.1"
   resolved "https://npm-registry.duowan.com/react-native-sqlite-storage/-/react-native-sqlite-storage-6.0.1.tgz#ce6a6b852f07abbea68658d5363818c8bef45dfb"
   integrity sha512-1tDFjrint6X6qSYKf3gDyz+XB+X79jfiL6xTugKHPRtF0WvqMtVgdLuNqZunIXjNEvNtNVEbXaeZ6MsguFu00A==
+
+react-native-udp@^4.1.7:
+  version "4.1.7"
+  resolved "https://npm-registry.duowan.com/react-native-udp/-/react-native-udp-4.1.7.tgz#9fa90b772b44c991605e8191444dd2ca3259cb58"
+  integrity sha512-NUE3zewu61NCdSsLlj+l0ad6qojcVEZPT4hVG/x6DU9U4iCzwtfZSASh9vm7teAcVzLkdD+cO3411LHshAi/wA==
+  dependencies:
+    buffer "^5.6.0"
+    events "^3.1.0"
 
 react-native-vector-icons@^9.2.0:
   version "9.2.0"

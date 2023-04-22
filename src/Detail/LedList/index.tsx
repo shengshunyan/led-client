@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {View, StyleSheet, TouchableHighlight, ScrollView} from 'react-native';
 import MyColorPicker from '../ColorPicker';
-import {settingModal} from '../../models';
 import {ISetting} from '../../models/types';
+import {useSocket} from '../../utils';
 
 const getList = (value: number) => {
   const result = [];
@@ -14,6 +14,7 @@ const getList = (value: number) => {
 };
 
 interface IProps {
+  setting: ISetting;
   config: Record<string, Record<string, string>>;
   setConfig: React.Dispatch<
     React.SetStateAction<Record<string, Record<string, string>>>
@@ -21,19 +22,22 @@ interface IProps {
 }
 
 const LedList: React.FunctionComponent<IProps> = function ({
+  setting,
   config,
   setConfig,
 }) {
+  const socket = useSocket(21325);
+
   const [colorPickerVisible, setColorPickerVisible] = useState(false);
-  const [setting, setSetting] = useState<ISetting | null>(null);
-  const [currentPosition, setCurrentPosition] = useState<{
+  const [currentLed, setCurrentLed] = useState<{
     row: number;
     col: number;
     color: string;
   } | null>(null);
 
+  // 点击一个灯珠
   const onItemPress = ({row, col}: {row: number; col: number}) => {
-    setCurrentPosition({
+    setCurrentLed({
       row,
       col,
       color: config?.[`row_${row}`]?.[`col_${col}`] || '#fff',
@@ -41,30 +45,29 @@ const LedList: React.FunctionComponent<IProps> = function ({
     setColorPickerVisible(true);
   };
 
+  // 选择一个灯珠的颜色
   const onSelectColor = (color: string) => {
     const newConfig = {...config};
 
-    if (!currentPosition) {
+    if (!currentLed) {
       console.error('未选中位置，不能更新灯串配置');
       return;
     }
 
-    if (!newConfig[`row_${currentPosition.row}`]) {
-      newConfig[`row_${currentPosition.row}`] = {};
+    if (!newConfig[`row_${currentLed.row}`]) {
+      newConfig[`row_${currentLed.row}`] = {};
     }
-    newConfig[`row_${currentPosition.row}`][`col_${currentPosition.col}`] =
-      color;
+    newConfig[`row_${currentLed.row}`][`col_${currentLed.col}`] = color;
     setConfig(newConfig);
-  };
 
-  useEffect(() => {
-    const init = async () => {
-      await settingModal?.set({colCount: 10, rowCount: 10});
-      const data = (await settingModal?.get()) || null;
-      setSetting(data);
-    };
-    init();
-  }, []);
+    // 发送数据包
+    // console.log('单个: ', {
+    //   position: {row: currentLed.row, col: currentLed.col},
+    //   colors: [color],
+    //   setting,
+    // });
+    socket.send({row: currentLed.row, col: currentLed.col}, [color], setting);
+  };
 
   if (!setting) {
     return null;
@@ -95,7 +98,7 @@ const LedList: React.FunctionComponent<IProps> = function ({
           <MyColorPicker
             visible={colorPickerVisible}
             setVisible={setColorPickerVisible}
-            color={currentPosition?.color || '#fff'}
+            color={currentLed?.color || '#ffffff'}
             onSelectColor={onSelectColor}
           />
         </View>

@@ -10,15 +10,22 @@ import {ButtonGroup, Input} from '@rneui/themed';
 import {showMessage} from 'react-native-flash-message';
 import {EventNameEnum} from '../constants';
 import LedList from './LedList';
-import {ledModal} from '../models';
+import {ledModal, settingModal} from '../models';
 import router from '../router';
+import {ISetting} from '../models/types';
+import {getColors, useSocket} from '../utils';
 
 const Detail: React.FunctionComponent<{navigation: any}> = function () {
   const inputRef = useRef<any>();
   const navigation = useNavigation<NavigationProp<any>>();
   const route = useRoute<RouteProp<{params: {rowid: number} | undefined}>>();
   const {rowid} = route.params || {};
+  const socket = useSocket(21326);
 
+  const [setting, setSetting] = useState<ISetting>({
+    colCount: 12,
+    rowCount: 12,
+  });
   /** 名称 */
   const [name, setName] = useState('');
   /** 难度 */
@@ -27,27 +34,6 @@ const Detail: React.FunctionComponent<{navigation: any}> = function () {
   const [config, setConfig] = useState<Record<string, Record<string, string>>>(
     {},
   );
-
-  // 编辑模式：需要获取旧配置详情
-  useEffect(() => {
-    const init = async () => {
-      if (!rowid && rowid !== 0) {
-        return;
-      }
-
-      const detail = await ledModal?.getItem(rowid).catch(error => {
-        console.log('获取详情错误: ', error, rowid);
-      });
-      if (!detail) {
-        return;
-      }
-
-      setName(detail.name);
-      setDifficulty(detail.difficulty);
-      setConfig(JSON.parse(detail.config));
-    };
-    init();
-  }, [rowid]);
 
   // 保存
   const onSubmit = useCallback(() => {
@@ -84,6 +70,45 @@ const Detail: React.FunctionComponent<{navigation: any}> = function () {
     navigation.navigate(router.list.name);
   }, [config, difficulty, name, navigation, rowid]);
 
+  // 初始化获取数据
+  useEffect(() => {
+    const init = async () => {
+      // 初始化请求全局配置
+      const localSetting = (await settingModal?.get()) || setting;
+      setSetting(localSetting);
+
+      if (!rowid && rowid !== 0) {
+        const colors = getColors({}, localSetting);
+        socket?.send({row: 1, col: 1}, colors, localSetting);
+        return;
+      }
+
+      // 编辑模式：需要获取旧配置详情
+      const detail = await ledModal?.getItem(rowid).catch(error => {
+        console.log('获取详情错误: ', error, rowid);
+      });
+      if (!detail) {
+        return;
+      }
+
+      const localConfig = JSON.parse(detail.config);
+      setName(detail.name);
+      setDifficulty(detail.difficulty);
+      setConfig(localConfig);
+
+      // 发送数据包
+      const colors = getColors(localConfig, localSetting);
+      // console.log('多个: ', {
+      //   position: {row: 1, col: 1},
+      //   colors,
+      //   setting: localSetting,
+      // });
+      socket?.send({row: 1, col: 1}, colors, localSetting);
+    };
+    init();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rowid]);
+
   // 监听保存按钮点击
   useEffect(() => {
     const eventListener = DeviceEventEmitter.addListener(
@@ -118,7 +143,7 @@ const Detail: React.FunctionComponent<{navigation: any}> = function () {
       />
 
       <Text style={styles.label}>灯串：</Text>
-      <LedList config={config} setConfig={setConfig} />
+      <LedList setting={setting} config={config} setConfig={setConfig} />
     </View>
   );
 };
