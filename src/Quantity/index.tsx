@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
+import {showMessage} from 'react-native-flash-message';
 import {settingModal} from '../models';
 import router from '../router';
 
@@ -19,7 +20,17 @@ const Quantity: React.FunctionComponent = () => {
     setCol(Number(newValue));
   };
 
+  // 保存
   const onSubmit = async () => {
+    // 校验必填
+    if (!row || !col) {
+      showMessage({
+        message: '请输入行列配置',
+        type: 'warning',
+      });
+      return;
+    }
+
     await settingModal?.set({rowCount: row, colCount: col});
     navigation.navigate(router.list.name);
   };

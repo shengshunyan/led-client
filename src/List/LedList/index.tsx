@@ -55,18 +55,22 @@ const LedList: React.FunctionComponent<IProps> = ({data}) => {
   return (
     <View style={styles.container}>
       <Tab
+        dense
         value={index}
         onChange={e => setIndex(e)}
-        containerStyle={styles.tabContainer}
-        indicatorStyle={styles.indicator}
-        variant="primary">
-        <Tab.Item title="全部" titleStyle={styles.tabTitle} />
-        <Tab.Item title="简单" titleStyle={styles.tabTitle} />
-        <Tab.Item title="普通" titleStyle={styles.tabTitle} />
-        <Tab.Item title="困难" titleStyle={styles.tabTitle} />
+        titleStyle={styles.tabTitle}
+        indicatorStyle={styles.tabIndicator}>
+        <Tab.Item title="全部" />
+        <Tab.Item title="简单" />
+        <Tab.Item title="普通" />
+        <Tab.Item title="困难" />
       </Tab>
 
-      <TabView value={index} onChange={setIndex} animationType="spring">
+      <TabView
+        value={index}
+        onChange={setIndex}
+        animationType="spring"
+        disableSwipe>
         <TabView.Item style={styles.tabViewItem}>
           {renderList(data)}
         </TabView.Item>
@@ -98,14 +102,12 @@ const styles = StyleSheet.create({
     minHeight: '100%',
     backgroundColor: 'red',
   },
-  tabContainer: {
-    backgroundColor: '#2196F3',
-  },
-  indicator: {
-    backgroundColor: 'white',
+  tabIndicator: {
+    backgroundColor: '#2089dc',
     height: 3,
   },
   tabTitle: {
+    color: '#2089dc',
     fontSize: 12,
   },
   tabViewItem: {
