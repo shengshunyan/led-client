@@ -3,7 +3,7 @@ import dgram from 'react-native-udp';
 import UdpSocket from 'react-native-udp/lib/types/UdpSocket';
 import {Buffer} from 'buffer';
 import {ISetting} from '../models/types';
-import {cutArray} from './index';
+import {cutArray, getSerial} from './index';
 
 const IP = '4.3.2.1';
 const PORT = 21324;
@@ -41,8 +41,7 @@ export const useSocket = (bindPort: number) => {
       (subColors, index) => {
         return new Promise((resolve, reject) => {
           const positionNumber = (
-            layout.colCount * (position.row - 1) +
-            position.col -
+            getSerial(position, layout) -
             1 +
             index * MAX_COLORS_LENGTH
           )

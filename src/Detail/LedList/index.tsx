@@ -60,12 +60,6 @@ const LedList: React.FunctionComponent<IProps> = function ({
     newConfig[`row_${currentLed.row}`][`col_${currentLed.col}`] = color;
     setConfig(newConfig);
 
-    // 发送数据包
-    // console.log('单个: ', {
-    //   position: {row: currentLed.row, col: currentLed.col},
-    //   colors: [color],
-    //   setting,
-    // });
     socket.send({row: currentLed.row, col: currentLed.col}, [color], setting);
   };
 

@@ -98,12 +98,8 @@ const Detail: React.FunctionComponent<{navigation: any}> = function () {
 
       // 发送数据包
       const colors = getColors(localConfig, localSetting);
-      // console.log('多个: ', {
-      //   position: {row: 1, col: 1},
-      //   colors,
-      //   setting: localSetting,
-      // });
-      socket?.send({row: 1, col: 1}, colors, localSetting);
+      // 起始位置是左下角
+      socket?.send({row: localSetting.rowCount, col: 1}, colors, localSetting);
     };
     init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
