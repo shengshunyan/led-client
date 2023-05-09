@@ -79,7 +79,11 @@ const Detail: React.FunctionComponent<{navigation: any}> = function () {
 
       if (!rowid && rowid !== 0) {
         const colors = getColors({}, localSetting);
-        socket?.send({row: 1, col: 1}, colors, localSetting);
+        socket?.send(
+          {row: localSetting.rowCount, col: 1},
+          colors,
+          localSetting,
+        );
         return;
       }
 
