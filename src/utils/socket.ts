@@ -4,10 +4,7 @@ import UdpSocket from 'react-native-udp/lib/types/UdpSocket';
 import {Buffer} from 'buffer';
 import {ISetting} from '../models/types';
 import {cutArray, getSerial} from './index';
-
-const IP = '4.3.2.1';
-const PORT = 21324;
-const MAX_COLORS_LENGTH = 400;
+import {IP, PORT, MAX_COLORS_LENGTH} from '../constants';
 
 export const useSocket = (bindPort: number) => {
   const socket = useRef<UdpSocket | undefined>();

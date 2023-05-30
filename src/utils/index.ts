@@ -1,5 +1,8 @@
 import {ISetting} from '../models/types';
 
+export {useSocket} from './socket';
+export {permission} from './permission';
+
 /** 获取灯珠颜色列表 */
 export const getColors = (
   config: Record<string, Record<string, string>>,
@@ -53,4 +56,18 @@ export function cutArray<T>(array: T[], cutLength: number) {
   return newArr;
 }
 
-export {useSocket} from './socket';
+/** 比较两个版本号, 例：v4.4.1， v4.4.2 */
+export const compareVersions = (version1: string, version2: string) => {
+  const v1 = version1.slice(1).split('.').map(Number);
+  const v2 = version2.slice(1).split('.').map(Number);
+
+  for (let i = 0; i < v1.length; i++) {
+    if (v1[i] > v2[i]) {
+      return 1; // 版本1大于版本2
+    } else if (v1[i] < v2[i]) {
+      return -1; // 版本1小于版本2
+    }
+  }
+
+  return 0; // 版本1等于版本2
+};

@@ -1,9 +1,8 @@
-import {DeviceEventEmitter, StyleSheet, View} from 'react-native';
+import {DeviceEventEmitter, StyleSheet, View, ScrollView} from 'react-native';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {Button, Icon, ListItem, Tab, TabView} from '@rneui/base';
 import React from 'react';
-import {ScrollView} from 'react-native';
-import {DifficultyEnum, ILedItem, TableRow} from '../../models/types';
+import {DifficultyList, ILedItem, TableRow} from '../../models/types';
 import router from '../../router';
 import {ledModal} from '../../models';
 import {EventNameEnum} from '../../constants';
@@ -21,6 +20,7 @@ const LedList: React.FunctionComponent<IProps> = ({data}) => {
       title="Delete"
       onPress={async () => {
         await ledModal?.deleteItem(rowid);
+        DeviceEventEmitter.emit(EventNameEnum.PERMISSION_CHECK);
         // 刷新列表
         DeviceEventEmitter.emit(EventNameEnum.REFRESH_LIST);
       }}
@@ -36,9 +36,10 @@ const LedList: React.FunctionComponent<IProps> = ({data}) => {
           {list.map(item => (
             <ListItem.Swipeable
               key={item.rowid}
-              onPress={() =>
-                navigation.navigate(router.detail.name, {rowid: item.rowid})
-              }
+              onPress={() => {
+                DeviceEventEmitter.emit(EventNameEnum.PERMISSION_CHECK);
+                navigation.navigate(router.detail.name, {rowid: item.rowid});
+              }}
               rightContent={() => rightContent(item.rowid)}>
               <Icon name="label-important-outline" type="material" />
               <ListItem.Content>
@@ -55,15 +56,15 @@ const LedList: React.FunctionComponent<IProps> = ({data}) => {
   return (
     <View style={styles.container}>
       <Tab
-        dense
         value={index}
         onChange={e => setIndex(e)}
         titleStyle={styles.tabTitle}
-        indicatorStyle={styles.tabIndicator}>
+        indicatorStyle={styles.tabIndicator}
+        scrollable>
         <Tab.Item title="全部" />
-        <Tab.Item title="简单" />
-        <Tab.Item title="普通" />
-        <Tab.Item title="困难" />
+        {DifficultyList.map(item => (
+          <Tab.Item key={item.value} title={item.name} />
+        ))}
       </Tab>
 
       <TabView
@@ -74,21 +75,14 @@ const LedList: React.FunctionComponent<IProps> = ({data}) => {
         <TabView.Item style={styles.tabViewItem}>
           {renderList(data)}
         </TabView.Item>
-        <TabView.Item style={styles.tabViewItem}>
-          {renderList(
-            data.filter(item => item.difficulty === DifficultyEnum.Simple),
-          )}
-        </TabView.Item>
-        <TabView.Item style={styles.tabViewItem}>
-          {renderList(
-            data.filter(item => item.difficulty === DifficultyEnum.Normal),
-          )}
-        </TabView.Item>
-        <TabView.Item style={styles.tabViewItem}>
-          {renderList(
-            data.filter(item => item.difficulty === DifficultyEnum.Difficult),
-          )}
-        </TabView.Item>
+
+        {DifficultyList.map(item => (
+          <TabView.Item key={item.value} style={styles.tabViewItem}>
+            {renderList(
+              data.filter(childItem => childItem.difficulty === item.value),
+            )}
+          </TabView.Item>
+        ))}
       </TabView>
     </View>
   );

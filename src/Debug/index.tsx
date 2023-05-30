@@ -1,12 +1,13 @@
 import * as React from 'react';
 import {StyleSheet} from 'react-native';
 import WebView from 'react-native-webview';
+import {IP} from '../constants';
 
 const Debug: React.FunctionComponent = () => {
   return (
     <WebView
       containerStyle={styles.container}
-      source={{uri: 'http://4.3.2.1/'}}
+      source={{uri: `http://${IP}/`}}
     />
   );
 };

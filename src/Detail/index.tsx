@@ -1,5 +1,11 @@
 import React, {useEffect, useState, useRef, useCallback} from 'react';
-import {View, StyleSheet, Text, DeviceEventEmitter} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  DeviceEventEmitter,
+  ScrollView,
+} from 'react-native';
 import {
   RouteProp,
   useRoute,
@@ -12,7 +18,7 @@ import {EventNameEnum} from '../constants';
 import LedList from './LedList';
 import {ledModal, settingModal} from '../models';
 import router from '../router';
-import {ISetting} from '../models/types';
+import {DifficultyList, ISetting} from '../models/types';
 import {getColors, useSocket} from '../utils';
 
 const Detail: React.FunctionComponent<{navigation: any}> = function () {
@@ -133,14 +139,19 @@ const Detail: React.FunctionComponent<{navigation: any}> = function () {
       />
 
       <Text style={styles.label}>难度：</Text>
-      <ButtonGroup
-        buttons={['简单', '普通', '困难']}
-        selectedIndex={difficulty}
-        onPress={value => {
-          setDifficulty(value);
-        }}
-        containerStyle={styles.buttonGroup}
-      />
+
+      <View style={styles.buttonGroup}>
+        <ScrollView horizontal>
+          <ButtonGroup
+            buttons={DifficultyList.map(item => item.name)}
+            selectedIndex={difficulty}
+            onPress={value => {
+              setDifficulty(value);
+            }}
+            buttonStyle={styles.buttonStyle}
+          />
+        </ScrollView>
+      </View>
 
       <Text style={styles.label}>灯串：</Text>
       <LedList setting={setting} config={config} setConfig={setConfig} />
@@ -159,6 +170,10 @@ const styles = StyleSheet.create({
   },
   buttonGroup: {
     marginBottom: 24,
+    height: 50,
+  },
+  buttonStyle: {
+    width: 50,
   },
 });
 

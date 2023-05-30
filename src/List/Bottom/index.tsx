@@ -1,13 +1,15 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
+import {DeviceEventEmitter, StyleSheet} from 'react-native';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {FAB} from '@rneui/base';
 import router from '../../router';
+import {EventNameEnum} from '../../constants';
 
 const Bottom: React.FunctionComponent = () => {
   const navigation = useNavigation<NavigationProp<any>>();
 
   const onPress = () => {
+    DeviceEventEmitter.emit(EventNameEnum.PERMISSION_CHECK);
     navigation.navigate(router.detail.name);
   };
 
