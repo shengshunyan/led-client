@@ -6,7 +6,7 @@ import {compareVersions} from './index';
 import {
   EventNameEnum,
   IP,
-  PERMISSION_ARCH,
+  PERMISSION_ARCH_LIST,
   PERMISSION_CORE,
   USER_OPERATION_TIMES_PER_CHECK,
 } from '../constants';
@@ -25,7 +25,7 @@ class Permission {
         .then(response => response.json())
         .then(data => {
           if (
-            data?.info?.arch === PERMISSION_ARCH &&
+            PERMISSION_ARCH_LIST.includes(data?.info?.arch) &&
             compareVersions(data?.info?.core, PERMISSION_CORE) >= 0
           ) {
             resolve(true);

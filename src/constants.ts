@@ -23,7 +23,7 @@ export const MAX_COLORS_LENGTH = 400;
 export const USER_OPERATION_TIMES_PER_CHECK = 10;
 
 /** 权限校验，arch */
-export const PERMISSION_ARCH = 'ESP32-C3';
+export const PERMISSION_ARCH_LIST = ['ESP32-C3', 'ESP32-S3'];
 
 /** 权限校验，core */
 export const PERMISSION_CORE = 'v4.4.1';
