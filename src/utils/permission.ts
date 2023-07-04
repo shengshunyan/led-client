@@ -7,19 +7,24 @@ import {
   EventNameEnum,
   IP,
   PERMISSION_ARCH_LIST,
+  PERMISSION_CHECK_REQUEST_RETRY_TIME,
   PERMISSION_CORE,
   USER_OPERATION_TIMES_PER_CHECK,
 } from '../constants';
 import {DeviceEventEmitter} from 'react-native';
 
 class Permission {
+  /** 用户操作触发权限校验次数 */
   private times = 0;
+  /** 权限校验请求重试次数 */
+  private retryTimes = 0;
 
   constructor() {
     DeviceEventEmitter.addListener(EventNameEnum.PERMISSION_CHECK, this.check);
   }
 
   private getResult = () => {
+    console.log('fetch http://${IP}/json/si');
     return new Promise(resolve => {
       fetch(`http://${IP}/json/si`)
         .then(response => response.json())
@@ -44,11 +49,16 @@ class Permission {
     this.times++;
 
     if (immediately || this.times >= USER_OPERATION_TIMES_PER_CHECK) {
-      const bool = await this.getResult();
+      this.times = 0;
+      let bool = await this.getResult();
 
-      if (!bool) {
-        DeviceEventEmitter.emit(EventNameEnum.PERMISSION_CHECK_FAIL);
+      while (!bool && this.retryTimes < PERMISSION_CHECK_REQUEST_RETRY_TIME) {
+        this.retryTimes++;
+        bool = await this.getResult();
       }
+      this.retryTimes = 0;
+
+      DeviceEventEmitter.emit(EventNameEnum.PERMISSION_CHECK_RESULT, bool);
     }
   };
 }

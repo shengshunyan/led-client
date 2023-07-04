@@ -3,6 +3,7 @@ import {View, StyleSheet, TouchableHighlight, ScrollView} from 'react-native';
 import MyColorPicker from '../ColorPicker';
 import {ISetting} from '../../models/types';
 import {useSocket} from '../../utils';
+import {Text} from '@rneui/base';
 
 const getList = (value: number) => {
   const result = [];
@@ -71,22 +72,32 @@ const LedList: React.FunctionComponent<IProps> = function ({
     <ScrollView style={styles.container}>
       <ScrollView horizontal>
         <View style={styles.layoutContainer}>
+          <View style={styles.colIndexContainer}>
+            {getList(setting.colCount).map(col => (
+              <Text key={col} style={styles.colIndex}>
+                {col}
+              </Text>
+            ))}
+          </View>
           {getList(setting.rowCount).map(row => (
-            <View key={row} style={styles.rowContainer}>
-              {getList(setting.colCount).map(col => (
-                <TouchableHighlight
-                  key={`${row}_${col}`}
-                  style={{
-                    ...styles.ledItem,
-                    backgroundColor:
-                      config?.[`row_${row}`]?.[`col_${col}`] || '#fff',
-                    borderColor:
-                      config?.[`row_${row}`]?.[`col_${col}`] || '#2089dc',
-                  }}
-                  onPress={() => onItemPress({row, col})}>
-                  <>{/* <Text>{`${row}_${col}`}</Text> */}</>
-                </TouchableHighlight>
-              ))}
+            <View key={row} style={styles.rowAndIndexContainer}>
+              <Text style={styles.rowIndex}>{row}</Text>
+              <View style={styles.rowContainer}>
+                {getList(setting.colCount).map(col => (
+                  <TouchableHighlight
+                    key={`${row}_${col}`}
+                    style={{
+                      ...styles.ledItem,
+                      backgroundColor:
+                        config?.[`row_${row}`]?.[`col_${col}`] || '#fff',
+                      borderColor:
+                        config?.[`row_${row}`]?.[`col_${col}`] || '#2089dc',
+                    }}
+                    onPress={() => onItemPress({row, col})}>
+                    <>{/* <Text>{`${row}_${col}`}</Text> */}</>
+                  </TouchableHighlight>
+                ))}
+              </View>
             </View>
           ))}
           <MyColorPicker
@@ -101,6 +112,8 @@ const LedList: React.FunctionComponent<IProps> = function ({
   );
 };
 
+// 灯珠直径
+const rollDiameter = 30;
 const styles = StyleSheet.create({
   container: {
     margin: 12,
@@ -110,16 +123,38 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     gap: 6,
   },
+  colIndexContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginLeft: 30,
+    gap: 6,
+  },
+  colIndex: {
+    width: rollDiameter,
+    height: rollDiameter,
+    lineHeight: rollDiameter,
+    textAlign: 'center',
+  },
+  rowAndIndexContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  rowIndex: {
+    width: 26,
+    height: rollDiameter,
+    lineHeight: rollDiameter,
+    marginRight: 4,
+  },
   rowContainer: {
     display: 'flex',
     flexDirection: 'row',
     gap: 6,
   },
   ledItem: {
-    width: 30,
-    height: 30,
+    width: rollDiameter,
+    height: rollDiameter,
     borderWidth: 1,
-    borderRadius: 15,
+    borderRadius: rollDiameter / 2,
   },
 });
 

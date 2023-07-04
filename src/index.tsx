@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {DeviceEventEmitter, StyleSheet} from 'react-native';
+import {DeviceEventEmitter} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import FlashMessage from 'react-native-flash-message';
@@ -7,13 +7,14 @@ import router from './router';
 import MenuIcon from './components/MenuIcon';
 import MenuDrawer from './MenuDrawer';
 import {initModels} from './models';
-import {Button, Text} from '@rneui/base';
+import {Button} from '@rneui/base';
 import {EventNameEnum} from './constants';
 import List from './List';
 import Detail from './Detail';
 import Quantity from './Quantity';
 import Debug from './Debug';
 import './utils/permission';
+import NoPermission from './components/NoPermission';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,7 +32,6 @@ function Main() {
     <Button
       title="保存"
       onPress={() => {
-        DeviceEventEmitter.emit(EventNameEnum.PERMISSION_CHECK);
         DeviceEventEmitter.emit(EventNameEnum.DETAIL_SAVE);
       }}
     />
@@ -54,9 +54,9 @@ function Main() {
     DeviceEventEmitter.emit(EventNameEnum.PERMISSION_CHECK, true);
 
     const eventListener = DeviceEventEmitter.addListener(
-      EventNameEnum.PERMISSION_CHECK_FAIL,
-      () => {
-        setIsPermissionAllow(false);
+      EventNameEnum.PERMISSION_CHECK_RESULT,
+      (bool: boolean) => {
+        setIsPermissionAllow(bool);
       },
     );
     return () => {
@@ -69,7 +69,7 @@ function Main() {
   }
 
   if (!isPermissionAllow) {
-    return <Text style={styles.noPermission}>无权限</Text>;
+    return <NoPermission />;
   }
 
   return (
@@ -122,12 +122,5 @@ function Main() {
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  noPermission: {
-    textAlign: 'center',
-    marginTop: 24,
-  },
-});
 
 export default Main;
